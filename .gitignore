@@ -1,0 +1,14 @@
+app/node_modules/
+app/build/
+app/.svelte-kit/
+dist/
+bin/**/*.msi
+bin/**/*.exe
+data/
+backups/
+perfil-chrome/
+instalacion.log
+*.log
+.env
+*/.atl
+.atl
