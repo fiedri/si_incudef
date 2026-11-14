@@ -1,0 +1,52 @@
+SISTEMA CULTORES - INSTALACION EN WINDOWS 8.1
+=============================================
+
+QUE ES
+  Aplicacion local. Corre en esta PC y se usa desde el navegador.
+  No necesita internet ni instalar nada mas.
+
+ANTES DE EMPEZAR
+  - Windows 8.1, 32 o 64 bits (el instalador detecta solo).
+  - Google Chrome instalado. Si no hay, abre en el navegador por defecto.
+
+PASO 1: COPIAR LA CARPETA
+  Copiar toda la carpeta a  C:\SistemaCultores
+  IMPORTANTE: no ejecutar desde el pendrive, ni desde Escritorio ni
+  Documentos. Si corre desde el pendrive, los datos y los respaldos
+  quedan guardados en el pendrive y se pierden al desconectarlo.
+
+PASO 2: INSTALAR
+  Doble clic en  instalar.bat
+  Debe mostrar "Arquitectura detectada: x64" (o x86) y
+  "Instalacion completa".
+  Si muestra "este paquete no incluye el binario para x86", avisar a
+  quien entrego el sistema: falta compilar el binario de 32 bits.
+
+PASO 3: USAR
+  Doble clic en  iniciar.vbs
+  Se abre una ventana sin barra de direcciones. Eso es la aplicacion.
+  Para cerrar: cerrar esa ventana y ejecutar  detener.bat
+
+  Si al abrir dice que ya esta corriendo, es normal: solo abre la ventana.
+
+ARRANCAR SOLA AL ENCENDER LA PC
+  1. Teclas Windows + R
+  2. Escribir:  shell:startup
+  3. Copiar ahi un acceso directo a  iniciar.vbs
+
+RESPALDOS
+  Ejecutar  respaldo.bat  una vez por dia, o programarlo.
+  Los respaldos quedan en  backups\  y se conservan 30 dias.
+  IMPORTANTE: la base de datos es un solo archivo, data\sistema.db.
+  Sin respaldos no hay forma de recuperar la informacion.
+
+SI ALGO FALLA
+  logs\instalacion.log   que paso al instalar
+  logs\servidor.log      que paso al iniciar
+  logs\respaldo.log      que paso con los respaldos
+  No borrar las carpetas data\ ni backups\.
+
+QUE NO HACER
+  - No mover la carpeta con la aplicacion abierta.
+  - No borrar data\ ni backups\.
+  - No copiar data\ a otra maquina con la aplicacion abierta.
