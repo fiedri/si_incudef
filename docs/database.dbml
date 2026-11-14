@@ -1,0 +1,127 @@
+// Gestion de usuarios y recuperación de contraseña
+Enum rol {
+    administrador
+    operador
+}
+
+Table usuarios {
+    id int [pk, increment]
+    username text [unique, not null]
+    password_hash text [not null]
+    rol rol [not null, check: `rol in ('administrador','operador')`]
+    intentos_fallidos integer [not null, default: 0, check: `intentos_fallidos >= 0`]
+    bloqueado_hasta integer [null] // segundos unix
+}
+
+Table preguntas_recuperacion {
+    id int [pk, increment]
+    pregunta text [not null]
+}
+
+Table question_answer {
+    id_usuario int [ref: > usuarios.id, delete: cascade]
+    id_pregunta int [ref: > preguntas_recuperacion.id, delete: restrict]
+    respuesta_hash text [not null, comment: 'hash de la respuesta, no la respuesta en texto plano']
+
+    indexes {
+        (id_usuario, id_pregunta) [pk]
+    }
+}
+
+// Gestion de cultores y catálogos
+Enum rol_agrupacion {
+    lider
+    miembro
+}
+
+Table disciplina {
+    id int [pk, increment]
+    nombre text [not null, unique]
+}
+
+Table agrupaciones {
+    id int [pk, increment]
+    nombre text [not null, unique]
+    descripcion text [not null]
+}
+
+// Estado geografico
+Table estado {
+    id int [pk, increment]
+    nombre text [not null, unique]
+}
+
+Table municipio {
+    id int [pk, increment]
+    nombre text [not null]
+    estado_id int [ref: > estado.id, not null, delete: restrict]
+
+    indexes {
+        (estado_id, nombre) [unique]
+    }
+}
+
+Table parroquia {
+    id int [pk, increment]
+    nombre text [not null]
+    municipio_id int [ref: > municipio.id, not null, delete: restrict]
+
+    indexes {
+        (municipio_id, nombre) [unique]
+    }
+}
+
+Table cultor {
+    id int [pk, increment]
+    tipo_cedula text [not null, check: `tipo_cedula in ('V','E')`]
+    cedula text [not null, check: `cedula <> '' and cedula not glob '*[^0-9]*'`]
+    nombres text [not null]
+    apellidos text [not null]
+    sexo text [not null, check: `sexo in ('M','F')`]
+    fecha_nacimiento date [not null, check: `fecha_nacimiento LIKE '____-__-__'`] // ISO YYYY-MM-DD
+    lugar_nacimiento text [not null]
+    direccion text [not null]
+    // Solo la parroquia: municipio y estado se derivan por join.
+    parroquia_id int [ref: > parroquia.id, not null, delete: restrict]
+    telefono text [not null]
+    // Opcionales y unicos: sin dato se guarda NULL
+    email text [unique, null]
+    carnet_patria text [unique, null]
+    disciplina_id int [ref: > disciplina.id, not null, delete: restrict]
+    trayectoria text [not null]
+    created_at integer [not null, default: `(strftime('%s','now'))`] // segundos unix
+    updated_at integer [not null, default: `(strftime('%s','now'))`] // segundos unix
+    created_by int [ref: > usuarios.id, not null, delete: restrict]
+    // Estado actual del cultor. El historial va en cultor_estado_historial.
+    estado_cultor text [not null, default: 'activo', check: `estado_cultor in ('activo','inactivo','fallecido')`]
+
+    indexes {
+        (tipo_cedula, cedula) [unique]
+    }
+}
+
+
+Table cultor_agrupacion {
+    id_cultor int [ref: > cultor.id, delete: cascade]
+    id_agrupacion int [ref: > agrupaciones.id, delete: cascade]
+    rol rol_agrupacion [not null, check: `rol in ('lider','miembro')`]
+
+    indexes {
+        (id_cultor, id_agrupacion) [pk]
+    }
+}
+
+Table proteccion_social {
+    id int [pk, increment]
+    id_cultor int [ref: > cultor.id, not null, delete: cascade]
+    patologias text
+    necesidad_financiamiento text
+    condicion_habitacional text
+    requerimiento_subsidio text
+    observaciones text
+    updated_at integer [not null, default: `(strftime('%s','now'))`]
+
+    indexes {
+        id_cultor [unique]
+    }
+}
