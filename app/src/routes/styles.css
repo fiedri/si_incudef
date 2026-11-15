@@ -1,3 +1,87 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+	font-family: 'PT Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/PT_Sans/PTSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'PT Sans';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('/fonts/PT_Sans/PTSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'PT Serif';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('/fonts/PT_Serif/PTSerif-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Spline Sans Mono';
+	font-style: normal;
+	font-weight: 300 700;
+	font-display: swap;
+	src: url('/fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf') format('truetype');
+}
+
+
+/* Incudef theme tokens — docs/incudef_design_system.md */
+@layer base {
+	:root {
+		--color-foreground: 26 29 36; /* #1A1D24 */
+		--color-muted-foreground: 82 88 102; /* #525866 */
+		--color-primary: 3 4 94; /* #03045E */
+		--color-on-primary: 255 255 255; /* #FFFFFF */
+		--color-primary-container: 232 234 255; /* #E8EAFF */
+		--color-on-primary-container: 3 4 94; /* #03045E */
+		--color-surface: 248 249 250; /* #F8F9FA */
+		--color-surface-container: 255 255 255; /* #FFFFFF */
+		--color-surface-container-low: 241 243 245; /* #F1F3F5 */
+		--color-on-surface: 26 29 36; /* #1A1D24 */
+		--color-on-surface-variant: 82 88 102; /* #525866 */
+		--color-outline: 208 213 221; /* #D0D5DD */
+		--color-outline-variant: 228 231 236; /* #E4E7EC */
+	}
+
+	.dark {
+		--color-foreground: 241 243 245; /* #F1F3F5 */
+		--color-muted-foreground: 152 162 179; /* #98A2B3 */
+		--color-primary: 186 195 255; /* #BAC3FF */
+		--color-on-primary: 3 4 94; /* #03045E */
+		--color-primary-container: 30 34 120; /* #1E2278 */
+		--color-on-primary-container: 232 234 255; /* #E8EAFF */
+		--color-surface: 15 17 23; /* #0F1117 */
+		--color-surface-container: 24 27 36; /* #181B24 */
+		--color-surface-container-low: 18 21 28; /* #12151C */
+		--color-on-surface: 241 243 245; /* #F1F3F5 */
+		--color-on-surface-variant: 152 162 179; /* #98A2B3 */
+		--color-outline: 52 64 84; /* #344054 */
+		--color-outline-variant: 29 41 57; /* #1D2939 */
+	}
+
+	body {
+		@apply bg-surface text-foreground;
+	}
+  h1,h2,h3,h4,h5,h6{
+    @apply font-serif
+  }
+
+  p{
+    @apply font-sans
+  }
+
+
+}
+
+
+
