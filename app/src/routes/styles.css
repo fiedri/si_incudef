@@ -83,5 +83,25 @@
 
 }
 
+/*
+ * Incudef component classes.
+ *
+ * Inputs opt in explicitly instead of relying on a bare `input[type="text"]`
+ * element selector: Tailwind v3 flattens `@layer` into plain CSS, so an element
+ * selector (0,1,1) would beat utility classes such as `pl-10` (0,1,0) and break
+ * icon-prefixed fields. Rules declared here are emitted in the components layer
+ * and stay below utilities, so per-element utilities still win.
+ */
+@layer components {
+	.field {
+		@apply w-full rounded border border-outline bg-surface-container px-gutter-md py-gutter-sm text-body-md text-on-surface placeholder:text-muted-foreground;
+		@apply transition duration-150 ease-state hover:border-on-surface-variant focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
+	}
+
+	.btn-primary {
+		@apply inline-flex cursor-pointer items-center justify-center rounded bg-primary px-gutter-md py-gutter-sm text-label-lg text-on-primary;
+		@apply transition duration-150 ease-state hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container;
+	}
+}
 
 
