@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1795131583226,
+      "tag": "0000_worried_rocket_racer",
+      "breakpoints": true
+    }
+  ]
+}

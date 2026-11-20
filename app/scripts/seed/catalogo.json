@@ -1,0 +1,11 @@
+{
+  "disciplinas": ["Artesanía", "Artes gráficas", "Danza", "Literatura", "Música", "Pintura", "Teatro"],
+  "preguntas": [
+    { "pregunta": "¿Cuál era tu apodo o sobrenombre en la infancia?", "placeholder": "Ej: Titi, Nano..." },
+    { "pregunta": "¿Cuál fue el nombre de tu primera mascota?", "placeholder": "Ej: Toby, Luna..." },
+    { "pregunta": "¿En qué ciudad se conocieron tus padres?", "placeholder": "Ej: Coro, Caracas..." },
+    { "pregunta": "¿Cómo se llamaba tu primera escuela o colegio?", "placeholder": "Ej: Escuela Básica..." },
+    { "pregunta": "¿Cuál era tu comida o plato favorito cuando eras niño?", "placeholder": "Ej: Arroz con pollo, arepas..." }
+  ],
+  "estados": []
+}
