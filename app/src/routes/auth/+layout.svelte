@@ -2,9 +2,9 @@
   <div
     class="hidden lg:block bg-primary dark:bg-primary-container bg-gradient-to-br from-primary-container/20 via-transparent to-on-primary/5 border-r border-outline-variant"
   ></div>
-  <div
+  <main
     class="min-h-screen w-full flex justify-center items-center flex-col px-gutter-md py-gutter-xl"
   >
     <slot />
-  </div>
+  </main>
 </section>

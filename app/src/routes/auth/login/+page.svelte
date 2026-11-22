@@ -1,7 +1,9 @@
 <script lang="ts">
   import { User, Lock, Eye, EyeOff } from "lucide-svelte";
+import { enhance } from "$app/forms";
   let showPassword = false;
-
+  let logging = false
+  export let form;
   function togglePassword() {
     showPassword = !showPassword;
   }
@@ -9,8 +11,16 @@
 
 <div class="flex flex-col items-center w-full">
   <form
-    action=""
+    method="POST"
     class="w-full max-w-xl rounded-lg border border-outline-variant bg-surface-container overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.15)] shadow-primary/30 border border-primary/30"
+    use:enhance={() => {
+		logging = true;
+
+		return async ({ update }) => {
+			await update();
+			logging = false;
+		};
+	}}
   >
     <div
       class="px-gutter-xl pt-gutter-lg pb-gutter-md flex flex-col items-start gap-gutter-sm bg-surface-container-low border-b border-outline-variant"
@@ -21,7 +31,9 @@
       </p>
     </div>
 
-    <div class="px-gutter-lg sm:px-gutter-xl py-gutter-lg flex flex-col gap-gutter-lg">
+    <div
+      class="px-gutter-lg sm:px-gutter-xl py-gutter-lg flex flex-col gap-gutter-lg"
+    >
       <div class="flex flex-col gap-gutter-md">
         <div>
           <label
@@ -42,18 +54,20 @@
               type="text"
               class="field pl-10"
               placeholder="username"
+              required
             />
           </div>
         </div>
         <div>
-          <div class="flex flex-row justify-between items-center gap-gutter-sm mb-gutter-xs">
+          <div
+            class="flex flex-row justify-between items-center gap-gutter-sm mb-gutter-xs"
+          >
             <label for="password" class="block text-label-lg text-on-surface"
               >Contraseña</label
             >
             <a
               class="rounded-sm text-label-lg text-accent underline decoration-accent/40 underline-offset-2 transition duration-150 ease-state hover:text-primary hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-              href="/auth/recovery"
-              >¿Olvidaste tu contraseña?</a
+              href="/auth/recovery">¿Olvidaste tu contraseña?</a
             >
           </div>
           <div class="relative flex items-center w-full">
@@ -68,11 +82,14 @@
               type={showPassword ? "text" : "password"}
               class="field pl-10 pr-10"
               placeholder="••••••••"
+              required
             />
 
             <button
               type="button"
-              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              aria-label={showPassword
+                ? "Ocultar contraseña"
+                : "Mostrar contraseña"}
               class="absolute right-3 flex items-center rounded-sm text-muted-foreground transition duration-150 ease-state hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer"
               on:click={togglePassword}
             >
@@ -85,8 +102,21 @@
           </div>
         </div>
       </div>
+      {#if form?.error}
+        {@const errorList = Object.values(form.error).flat().filter(Boolean)}
 
-      <button type="submit" class="btn-primary w-full">Iniciar Sesión</button>
+        {#if errorList.length > 0}
+          <ul
+            class="bg-error/30 p-2 pl-10 text-error text-sm rounded-md animate-in fade-in slide-in-from-top-2 flex flex-col list-disc"
+          >
+            {#each errorList as message}
+              <li class="font-bold">{message}</li>
+            {/each}
+          </ul>
+        {/if}
+      {/if}
+
+      <button type="submit" class="btn-primary w-full disabled:bg-muted-foreground" disabled={logging}>{logging? "Iniciando...": "Iniciar Sesión" }</button>
     </div>
   </form>
 

@@ -45,7 +45,9 @@
     <div
       class="px-gutter-xl pt-gutter-lg pb-gutter-md flex flex-col items-start gap-gutter-sm bg-surface-container-low border-b border-outline-variant"
     >
-      <h2 class="font-serif text-headline-md text-primary">Recuperar Contraseña</h2>
+      <h2 class="font-serif text-headline-md text-primary">
+        Recuperar Contraseña
+      </h2>
       <p
         class="inline-flex w-fit items-center rounded-full bg-accent px-gutter-sm py-gutter-xs text-label-sm text-on-accent"
       >
@@ -53,7 +55,9 @@
       </p>
     </div>
 
-    <div class="overflow-y-auto px-gutter-lg sm:px-gutter-xl py-gutter-lg flex flex-col gap-gutter-lg">
+    <div
+      class="overflow-y-auto px-gutter-lg sm:px-gutter-xl py-gutter-lg flex flex-col gap-gutter-lg"
+    >
       {#if step == "identify"}
         <form
           on:submit|preventDefault={() => nextStep("questions")}
@@ -163,8 +167,10 @@
             </div>
           </div>
           <div class="ml-gutter-md">
-          <!-- ponerle un condicional si cumple los requisitos text-primary-->
-            <ul class="list-disc list-inside space-y-gutter-xs text-body-sm text-muted-foreground">
+            <!-- ponerle un condicional si cumple los requisitos text-primary-->
+            <ul
+              class="list-disc list-inside space-y-gutter-xs text-body-sm text-muted-foreground"
+            >
               <li>Mínimo 8 caracteres</li>
               <li>Al menos una letra mayúscula y un número</li>
             </ul>
@@ -179,15 +185,15 @@
 <p>Verificar respuestas</p>
           -->
         </form>
-        {:else if step == "success"}
+      {:else if step == "success"}
         <div>
-            <h3 class="font-sans text-title-lg text-primary">
-              ¡Contraseña actualizada!
-            </h3>
-            <p class="text-body-md text-muted-foreground">
-             Tu clave se ha restablecido correctamente. Ya puedes ingresar al panel con tus nuevas credenciales. 
-            </p>
- 
+          <h3 class="font-sans text-title-lg text-primary">
+            ¡Contraseña actualizada!
+          </h3>
+          <p class="text-body-md text-muted-foreground">
+            Tu clave se ha restablecido correctamente. Ya puedes ingresar al
+            panel con tus nuevas credenciales.
+          </p>
         </div>
       {/if}
 
@@ -202,9 +208,9 @@
     </div>
   </div>
   <p
-  data-design-text-token="body-sm"
-  class="text-body-sm text-muted-foreground mt-gutter-md text-center"
->
-  © {new Date().getFullYear()} Incudef · Acceso exclusivo para personal autorizado.
-</p>
+    data-design-text-token="body-sm"
+    class="text-body-sm text-muted-foreground mt-gutter-md text-center"
+  >
+    © {new Date().getFullYear()} Incudef · Acceso exclusivo para personal autorizado.
+  </p>
 </div>
