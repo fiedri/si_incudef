@@ -1,5 +1,7 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
+declare module "datatables.net-buttons-dt";
+declare module "datatables.net-buttons";
+declare module "datatables.net-buttons/js/buttons.html5.mjs";
+declare module "datatables.net-buttons/js/buttons.print.mjs";
 export interface SessionUser {
 	id: string;
 	username: string;
@@ -12,6 +14,13 @@ declare global {
 			user: SessionUser | null;
 		}
 	}
+}
+import type { ConfigButtons } from 'datatables.net-buttons';
+
+declare module 'datatables.net' {
+  interface Feature {
+    buttons?: ConfigButtons | string[];
+  }
 }
 
 export {};
