@@ -16,6 +16,7 @@ Table usuarios {
 Table preguntas_recuperacion {
     id int [pk, increment]
     pregunta text [not null]
+    placeholder text [not null]
 }
 
 Table question_answer {
