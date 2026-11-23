@@ -36,6 +36,7 @@ export const actions = {
       id: user.id,
       username: user.username,
       role: user.rol,
+      needConfiguration: user.mustChangePassword
     });
     event.cookies.set("session", token, {
       path: "/",
