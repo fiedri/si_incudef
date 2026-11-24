@@ -6,10 +6,10 @@ import Database from "better-sqlite3";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 
-dotenv.config({path: path.resolve(process.cwd(), '.env'), override: true})
+dotenv.config({ path: path.resolve(process.cwd(), '.env') })
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DB_PATH = path.resolve(
-  process.env.DATABASE_PATH ?? path.join(ROOT, "data", "sistema.db"),
+  process.env.DATABASE_PATH || path.join(ROOT, "data", "sistema.db"),
 );
 const MIGRATIONS_DIR = path.join(ROOT, "drizzle");
 const CATALOG_FILE = path.join(ROOT, "scripts", "seed", "catalogo.json");
@@ -152,10 +152,31 @@ function seedAdmin(db) {
     log(`${Object.keys(respuestas).length} respuestas de seguridad agregadas`);
   }
 
-  return password;
+  return generated ? password : null;
+}
+
+function removePartialDb() {
+  try {
+    if (!fs.existsSync(DB_PATH)) return;
+    if (fs.statSync(DB_PATH).size === 0) {
+      fs.unlinkSync(DB_PATH);
+      return;
+    }
+    const probe = new Database(DB_PATH, { readonly: true });
+    const tables = probe.prepare(
+      "SELECT count(*) n FROM sqlite_master WHERE type='table'"
+    ).get().n;
+    probe.close();
+    if (tables === 0) fs.unlinkSync(DB_PATH);
+  } catch (_) {
+    // Limpieza best-effort: el error original es el que importa.
+  }
 }
 
 async function main() {
+  if (process.env.ADMIN_PASSWORD && Buffer.byteLength(process.env.ADMIN_PASSWORD) > 72) {
+    throw new Error('ADMIN_PASSWORD supera los 72 bytes de bcrypt');
+  }
   const db = openDb();
   let generatedPassword;
 
@@ -181,5 +202,6 @@ async function main() {
 
 main().catch((error) => {
   console.error(`[db:init] ERROR: ${error.message}`);
+  removePartialDb();
   process.exit(1);
 });

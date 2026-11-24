@@ -3,8 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT= __dirname;
-const DB_PATH= process.env.DB_PATH || path.join(ROOT, 'data', 'sistema.db');
+const ROOT = __dirname;
+const DB_PATH = path.resolve(
+  process.env.DATABASE_PATH ||
+    process.env.DB_PATH ||
+    path.join(ROOT, 'data', 'sistema.db')
+);
 const BACKUP_DIR= path.join(ROOT, 'backups');
 const LOG_DIR = path.join(ROOT, 'logs');
 const RETENTION_DAYS = 30;

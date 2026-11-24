@@ -67,6 +67,12 @@ log "dependencias de produccion"
 cp -a "${APP}/build" "${DIST}/app/"
 cp "${APP}/package.json" "${APP}/yarn.lock" "${DIST}/app/"
 
+# --- inicializador de la base de datos -----------------------------------
+# La DB se crea en el equipo destino durante instalar.bat, no aqui: asi cada
+# instalacion tiene su propia clave de administrador.
+cp -a "${APP}/scripts" "${DIST}/app/"
+cp -a "${APP}/drizzle" "${DIST}/app/"
+
 # --- binarios de Windows -------------------------------------------------
 cp "${ROOT_DIR}/bin/node-x64/node.exe"       "${DIST}/bin/node-x64.exe"
 cp "${ROOT_DIR}/bin/node-x86/node.exe"       "${DIST}/bin/node-x86.exe"
@@ -88,6 +94,9 @@ fi
 esperados=(
   "app/build/index.js"
   "app/package.json"
+  "app/scripts/init-db.mjs"
+  "app/scripts/seed/catalogo.json"
+  "app/drizzle/0000_worried_rocket_racer.sql"
   "app/node_modules/better-sqlite3/package.json"
   "app/node_modules/drizzle-orm/package.json"
   "app/node_modules/bcryptjs/package.json"

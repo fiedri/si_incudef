@@ -25,7 +25,7 @@ env("NODE_ENV") = "production"
 env("HOST")     = "127.0.0.1"
 env("PORT")     = port
 env("ORIGIN")   = url
-env("DB_PATH")  = base & "\data\sistema.db"
+env("DATABASE_PATH") = base & "\data\sistema.db"
 
 sh.CurrentDirectory = base
 sh.Run "cmd /c " & q & q & nodeExe & q & " " & q & base & "\app\build\index.js" & q & _

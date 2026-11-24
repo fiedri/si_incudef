@@ -57,6 +57,38 @@ if errorlevel 1 (
   exit /b 1
 )
 
+rem --- base de datos: se crea una sola vez, en esta maquina ---------------
+set "DATABASE_PATH=%CD%\data\sistema.db"
+if exist "data\sistema.db" (
+  echo Base de datos existente; no se modifica.
+  goto :db_ok
+)
+
+echo Inicializando base de datos...
+"runtime\node.exe" "app\scripts\init-db.mjs" > "logs\inicializacion.log" 2>&1
+if errorlevel 1 (
+  echo ERROR: no se pudo inicializar la base de datos >> "%LOG%"
+  echo ERROR: no se pudo inicializar la base de datos.
+  echo Detalle en logs\inicializacion.log
+  type "logs\inicializacion.log"
+  if exist "data\sistema.db" del /f /q "data\sistema.db"
+  exit /b 1
+)
+
+findstr /C:"CLAVE:" "logs\inicializacion.log" >nul
+if not errorlevel 1 (
+  echo.
+  echo ============================================================
+  echo CLAVE TEMPORAL DEL ADMINISTRADOR - guardela ahora
+  findstr /C:"CLAVE:" "logs\inicializacion.log"
+  echo Tambien queda en logs\inicializacion.log
+  echo ============================================================
+  echo.
+  pause
+)
+
+:db_ok
+
 echo OK >> "%LOG%"
 echo Instalacion completa. Ejecute init.vbs
 exit /b 0
