@@ -15,9 +15,9 @@ If Not fso.FileExists(nodeExe) Then
     WScript.Quit 1
 End If
 
-' Si ya está corriendo, abre el navegador directamente
+' Si el servidor ya está corriendo, abre la ventana secundaria sin controlar el apagado
 If ServerUp(url) Then
-    OpenChrome base, url, fso, sh, q
+    OpenChrome base, url, fso, sh, q, False
     WScript.Quit 0
 End If
 
@@ -37,7 +37,8 @@ sh.Run q & base & "\run.bat" & q, 0, False
 For i = 1 To 40
     WScript.Sleep 250
     If ServerUp(url) Then
-        OpenChrome base, url, fso, sh, q
+        ' Esta instancia inició el servidor; controlará el apagado cuando finalice el proceso principal
+        OpenChrome base, url, fso, sh, q, True
         WScript.Quit 0
     End If
 Next
@@ -50,7 +51,6 @@ Function ServerUp(u)
     ServerUp = False
     On Error Resume Next
     Set http = CreateObject("WinHttp.WinHttpRequest.5.1")
-    ' Timeouts: Resolve (500ms), Connect (500ms), Send (500ms), Receive (500ms)
     http.SetTimeouts 500, 500, 500, 500
     http.Open "GET", u, False
     http.Send
@@ -61,7 +61,7 @@ Function ServerUp(u)
     On Error GoTo 0
 End Function
 
-Sub OpenChrome(b, u, f, s, quote)
+Sub OpenChrome(b, u, f, s, quote, isMaster)
     Dim candidates, chrome
     candidates = Array( _
         s.ExpandEnvironmentStrings("%ProgramFiles(x86)%") & "\Google\Chrome\Application\chrome.exe", _
@@ -70,13 +70,18 @@ Sub OpenChrome(b, u, f, s, quote)
 
     For Each chrome In candidates
         If f.FileExists(chrome) Then
-            ' El parametro True congela la ejecucion del VBS hasta que se cierre la ventana de Chrome
-            s.Run quote & chrome & quote & " --app=" & u & _
-                  " --user-data-dir=" & quote & b & "\perfil-chrome" & quote & _
-                  " --no-first-run --no-default-browser-check", 1, True
-
-            ' Una vez cerrada la ventana, ejecuta el apagado del servidor
-            s.Run quote & b & "\stop.bat" & quote, 0, True
+            If isMaster Then
+                ' Instancia maestra: aguarda el cierre del proceso principal y detiene el servidor
+                s.Run quote & chrome & quote & " --app=" & u & _
+                      " --user-data-dir=" & quote & b & "\perfil-chrome" & quote & _
+                      " --no-first-run --no-default-browser-check", 1, True
+                s.Run quote & b & "\stop.bat" & quote, 0, True
+            Else
+                ' Instancia secundaria: abre la ventana en el proceso existente y finaliza limpiamente
+                s.Run quote & chrome & quote & " --app=" & u & _
+                      " --user-data-dir=" & quote & b & "\perfil-chrome" & quote & _
+                      " --no-first-run --no-default-browser-check", 1, False
+            End If
             Exit Sub
         End If
     Next
