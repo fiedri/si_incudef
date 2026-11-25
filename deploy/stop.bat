@@ -2,10 +2,8 @@
 setlocal
 cd /d "%~dp0"
 echo Deteniendo el servidor...
-wmic process where "ExecutablePath='%~dp0runtime\node.exe'" delete >nul 2>&1
-if errorlevel 1 (
-  echo No se encontro el proceso del servidor en ejecucion.
-  exit /b 1
-)
+
+powershell -NoProfile -Command "$target = (Resolve-Path 'runtime\node.exe').Path; Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $target } | Stop-Process -Force"
+
 echo Servidor detenido.
 exit /b 0

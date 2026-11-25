@@ -64,6 +64,17 @@ if exist "data\sistema.db" (
   goto :db_ok
 )
 
+rem --- regla de firewall (limpieza de bloqueos y permiso) ---
+echo Configurando permisos de red... >> "%LOG%"
+netsh advfirewall firewall delete rule name=all program="%CD%\runtime\node.exe" >nul 2>&1
+netsh advfirewall firewall add rule name="Sistema Cultores Portable" dir=in action=allow program="%CD%\runtime\node.exe" enable=yes profile=any >nul 2>&1
+if errorlevel 1 (
+  echo WARNING: No se pudo agregar la regla de firewall automaticamente. >> "%LOG%"
+  echo (Ejecute install.bat como Administrador si el sistema bloquea el puerto).
+) else (
+  echo Permisos de red configurados correctamente. >> "%LOG%"
+)
+
 echo Inicializando base de datos...
 "runtime\node.exe" "app\scripts\init-db.mjs" > "logs\inicializacion.log" 2>&1
 if errorlevel 1 (
